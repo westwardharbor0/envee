@@ -51,10 +51,11 @@ func (e *Envee) parse(o any, prefix string) error {
 			return err
 		}
 
-		envVal, exists := os.LookupEnv(e.prefix + prefix + f.name)
+		varName := e.prefix + prefix + f.name
+		envVal, exists := os.LookupEnv(varName)
 
 		if !exists && f.isRequired() {
-			return fmt.Errorf("%w: %q", ErrMissingRequired, f.name)
+			return fmt.Errorf("%w: %q", ErrMissingRequired, varName)
 		}
 
 		if !exists {
@@ -63,7 +64,7 @@ func (e *Envee) parse(o any, prefix string) error {
 
 		typed, err := parseTypeValue(envVal, val.Field(i).Type())
 		if err != nil && !errors.Is(err, ErrUnsupportedType) {
-			return fmt.Errorf("%s: %w", f.name, err)
+			return fmt.Errorf("%s: %w", varName, err)
 		}
 
 		if err == nil {
@@ -73,7 +74,7 @@ func (e *Envee) parse(o any, prefix string) error {
 
 		kinded, err := parseKindValue(envVal, val.Field(i).Kind())
 		if err != nil {
-			return fmt.Errorf("%s: %w", f.name, err)
+			return fmt.Errorf("%s: %w", varName, err)
 		}
 
 		val.Field(i).Set(reflect.ValueOf(kinded))

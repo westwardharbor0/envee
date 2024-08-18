@@ -1,5 +1,7 @@
 # ENVEE
 
+[pkg.go.dev](https://pkg.go.dev/github.com/westwardharbor0/envee#section-readme)
+
 Yet another ENV configuration loader
 
 ```bash
